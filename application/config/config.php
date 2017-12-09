@@ -16,7 +16,7 @@
 | environments.
 |
 */
-$config['base_url'] = 'http://localhost/kopi_old/';
+$config['base_url'] = 'http://localhost/MesinKopi/';
 
 /*
 |--------------------------------------------------------------------------
