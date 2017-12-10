@@ -16,15 +16,9 @@
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		      <ul class="nav navbar-nav col-md-12">
-		      		<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/1">KETTLE/TEKO</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/2">COLD BREW & SYPHON</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/3">V60 DRIPPER & SERVER</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/4">MANUAL PRESSO & HAND GRINDER</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/5">OTHER EQUIPMENTS</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/6">MILK JUG, TIMER & SCALE</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/7">GRINDER LISTRIK</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/8">ESPRESSO MACHINE</a></li>
-					<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/9">PAKET MESIN ESPRESSO & GRINDER</a></li>
+		      	<?php foreach ($list_kategori as $key): ?>
+		      		<li role="presentation" style="font-size: 12px;"><a href="<?php echo base_url(); ?>site/product/<?php echo $key->kategori_slug; ?>"><?php echo $key->nama_kategori ?></a></a></li>
+				<?php endforeach ?>
 		      </ul>
 		    </div><!-- /.navbar-collapse -->
 		  </div><!-- /.container-fluid -->
@@ -50,7 +44,7 @@
 											<h4>Rp.<?php echo $key->harga;?></h4>
 										</div>
 										<div class="snipcart-details top_brand_home_details">
-											<a href="<?php echo base_url();?>site/detailproduct/<?php echo $key->id_product; ?>"><input type="button" value="Lihat Detail" class="button"></a>
+											<a href="<?php echo base_url();?>site/detailproduct/<?php echo $key->nama_slug; ?>"><input type="button" value="Lihat Detail" class="button"></a>
 										</div>
 									</div>
 								</figure>
