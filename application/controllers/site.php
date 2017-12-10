@@ -12,6 +12,7 @@ class Site extends CI_Controller {
 
 	public function index()
 	{
+		$data['kategori']=$this->m_site->show_all_kategori();
 		$data['product']=$this->m_site->show_rekomendasi();
 		$data['judul']='Menikmati kopi | Home';
     	$this->load->view('site/v_head',$data);
@@ -19,9 +20,9 @@ class Site extends CI_Controller {
     	$this->load->view('site/v_foot');
 	}
 
-	public function detailproduct($id)
+	public function detailproduct($slug)
 	{
-		$data['product']=$this->m_site->get_product_by_id($id);
+		$data['product']=$this->m_site->get_product_by_id($slug);
 		$data['judul']='Menikmati kopi | Detail Produk';
     	$this->load->view('site/v_head',$data);
 		$this->load->view('site/v_detail');
@@ -32,10 +33,11 @@ class Site extends CI_Controller {
 	{
 		if($kategori == NULL)
 		{
-			$kategori = 1;
+			$kategori = "kettle-teko";
 		}
 
 		$data['product']=$this->m_site->show_kategori($kategori);
+		$data['list_kategori']=$this->m_site->show_all_kategori();
 	    $data['kat']=$this->m_site->nama_kategori($kategori);
 	    $data['judul']= 'Menikmati kopi | Produk';
 	    $this->load->view('site/v_head',$data);
@@ -52,7 +54,7 @@ class Site extends CI_Controller {
     $this->load->view('site/v_foot');
   }
 
-    public function services()
+  public function services()
   {
   	$data['judul']='Menikmati kopi | Services';
     $this->load->view('site/v_head',$data);
