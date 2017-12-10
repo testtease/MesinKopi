@@ -218,9 +218,9 @@ class Dashboard extends CI_Controller {
 	        redirect('dashboard/user');    
 	}
 
-	public function delete_user($id)
+	public function delete_user($slug)
 	{	
-			$this->db->where('id_user', $id);
+			$this->db->where('id_user', $slug);
 	        $this->db->delete('user');
 	        $this->session->set_flashdata('info', 'User telah berhasil dihapus !');
 	        redirect('dashboard/user');   
