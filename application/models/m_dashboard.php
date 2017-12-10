@@ -3,17 +3,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class M_dashboard extends CI_Model {
 
-	function upload($data)
-	{
-		$this->db->insert('product', $data);
+    function upload($data)
+    {
+        $this->db->insert('product', $data);
         return;
     }
 
     function show_product()
-	{
-    	$sql = "SELECT * FROM product, kategori WHERE product.kategori = kategori.id_kategori ORDER BY id_product DESC";
+    {
+        $sql = "SELECT * FROM product, kategori WHERE product.kategori = kategori.id_kategori ORDER BY id_product DESC";
         $sql = $this->db->query($sql);
-		return $sql->result();
+        return $sql->result();
     }
 
     function show_user()
@@ -47,23 +47,23 @@ class M_dashboard extends CI_Model {
         return $sql->result();
     }
 
-    function get_product_by_id($id)
+    function get_product_by_id($slug)
     {
-        $sql = "SELECT * FROM product WHERE id_product = '$id'";
+        $sql = "SELECT * FROM product WHERE nama_slug = '$slug'";
         $sql = $this->db->query($sql);
         return $sql->row();
     }
 
-    function update($id, $data)
+    function update($slug, $data)
     {
-    	$this->db->where('id_product', $id);
+        $this->db->where('nama_slug', $slug);
         $this->db->update('product', $data);
     }
 
-    function delete_product($id)
+    function delete_product($slug)
     {
-    	$this->db->where('id_product', $id);
-    	$this->db->delete('product');
+        $this->db->where('nama_slug', $slug);
+        $this->db->delete('product');
     }
 }
 
