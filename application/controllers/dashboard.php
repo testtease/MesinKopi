@@ -11,61 +11,35 @@ class Dashboard extends CI_Controller {
 	}
 
 	public function index()
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_index');
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function product()
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{		
 			$data['product']=$this->m_dashboard->show_product();
 
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_product',$data);
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function add_product()
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$data['kategori']=$this->m_dashboard->show_kategori();
 
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_product_add',$data);
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function upload()
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png';
 			$config['max_size']	= '2048';
@@ -84,6 +58,7 @@ class Dashboard extends CI_Controller {
 	                    $data = array
 	                	(	                    
 		                    'nama'=>$this->input->post('nama'),
+		                    'nama_slug'=>slug($this->input->post('nama')),
 		                    'harga'=>$this->input->post('harga'),
 		                    'detail'=>$this->input->post('detail'),
 		                    'deskripsi'=>$this->input->post('deskripsi'),
@@ -94,38 +69,22 @@ class Dashboard extends CI_Controller {
 	                $this->m_dashboard->upload($data);
 	                $this->session->set_flashdata('info', 'Data telah berhasil dimasukkan !');
 	                redirect('dashboard/product');
-	                }              
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		 
+	                }              	 
 	}
 
-	public function edit_product($id)
-	{
-		if($this->session->userdata('isLogin'))
-		{
-			$data['product'] = $this->m_dashboard->get_product_by_id($id);
+	public function edit_product($slug)
+	{	
+			$data['product'] = $this->m_dashboard->get_product_by_id($slug);
 			$data['kategori'] = $this->m_dashboard->show_kategori();
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_product_edit',$data);
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function update()
-	{
-		if($this->session->userdata('isLogin'))
-		{
-			$id=$this->input->post('id_product');
+	{	
+			$slug=$this->input->post('nama_slug');
 			$config['upload_path'] = './uploads/';
 			$config['allowed_types'] = 'gif|jpg|png';
 			$config['max_size']	= '2048';
@@ -138,6 +97,7 @@ class Dashboard extends CI_Controller {
 	                	$data = array
 	                	(
 		                    'nama'=>$this->input->post('nama'),
+		                    'nama_slug'=>slug($this->input->post('nama')),
 		                    'harga'=>$this->input->post('harga'),
 		                    'detail'=>$this->input->post('detail'),
 		                    'deskripsi'=>$this->input->post('deskripsi'),
@@ -145,7 +105,7 @@ class Dashboard extends CI_Controller {
 		                    'status'=>$this->input->post('status'),
 		                    'img'=>$this->input->post('gbr')
 	                	);
-						$this->m_dashboard->update($id, $data);
+						$this->m_dashboard->update($slug, $data);
 						$this->session->set_flashdata('info', 'Data telah berhasil diedit !');
 						redirect('dashboard/product','refresh');
 	                }
@@ -156,6 +116,7 @@ class Dashboard extends CI_Controller {
 	                    $data = array
 	                	(
 		                    'nama'=>$this->input->post('nama'),
+		                    'nama_slug'=>slug($this->input->post('nama')),
 		                    'harga'=>$this->input->post('harga'),
 		                    'detail'=>$this->input->post('detail'),
 		                    'deskripsi'=>$this->input->post('deskripsi'),
@@ -163,80 +124,49 @@ class Dashboard extends CI_Controller {
 		                    'status'=>$this->input->post('status'),
 		                    'img'=>$gambar
 	                	);
-	                	$detail=$this->m_dashboard->get_product_by_id($id);
+	                	$detail=$this->m_dashboard->get_product_by_id($slug);
 	                	unlink("uploads/".$detail->img);
-						$this->m_dashboard->update($id, $data);
+						$this->m_dashboard->update($slug, $data);
 						$this->session->set_flashdata('info', 'Data telah berhasil diedit !');
 						redirect('dashboard/product','refresh');
-						}
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+						}	
 	}
 
-	public function delete_product($id)
+	public function delete_product($slug)
 	{
-		if($this->session->userdata('isLogin'))
-		{
-			$detail=$this->m_dashboard->get_product_by_id($id);
-		    unlink("uploads/".$detail->img);
-			$this->m_dashboard->delete_product($id);
-			$this->session->set_flashdata('info', 'Data Telah Berhasil Dihapus');
-			redirect('dashboard/product','refresh');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
 		
+			$detail=$this->m_dashboard->get_product_by_id($slug);
+		    unlink("uploads/".$detail->img);
+			$this->m_dashboard->delete_product($slug);
+			$this->session->set_flashdata('info', 'Data Telah Berhasil Dihapus');
+			redirect('dashboard/product','refresh');	
 	}
 
 	public function user()
 	{
-		if($this->session->userdata('isLogin'))
-		{
+		
 			$data['user']=$this->m_dashboard->show_user();
 
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_user',$data);
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function add_user()
 	{
-		if($this->session->userdata('isLogin'))
-		{
+		
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_user_add');
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function add()
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$username=$this->input->post('username');
 			$pass=$this->input->post('password');
 			$pass2=$this->input->post('password2');
-
-			
 
 			$cek = $this->m_dashboard->cek_user($username);
 	        if($cek <> 0)
@@ -257,37 +187,21 @@ class Dashboard extends CI_Controller {
 	        	$this->db->insert('user', $data);
 	        	$this->session->set_flashdata('info', 'User telah berhasil ditambahkan !');
 	        	redirect('dashboard/user');
-	        }
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+	        }	
 	}
 
 	public function edit_user($id)
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$data['user']=$this->m_dashboard->get_user_id($id);
 
 			$this->load->view('dash/v_header');
 			$this->load->view('dash/v_sidebar');
 			$this->load->view('dash/v_user_edit',$data);
-			$this->load->view('dash/v_footer');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
+			$this->load->view('dash/v_footer');	
 	}
 
 	public function update_user()
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$username=$this->input->post('username');
 			$pass=$this->input->post('password');
 			$pass2=$this->input->post('password2');
@@ -301,31 +215,15 @@ class Dashboard extends CI_Controller {
 	        $this->db->where('username', $username);
 	        $this->db->update('user', $data);
 	        $this->session->set_flashdata('info', 'Password telah berhasil diganti !');
-	        redirect('dashboard/user');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-		
-        
+	        redirect('dashboard/user');    
 	}
 
 	public function delete_user($id)
-	{
-		if($this->session->userdata('isLogin'))
-		{
+	{	
 			$this->db->where('id_user', $id);
 	        $this->db->delete('user');
 	        $this->session->set_flashdata('info', 'User telah berhasil dihapus !');
-	        redirect('dashboard/user');
-		}
-		else
-		{
-			redirect('login','refresh');
-		}
-        
-        
+	        redirect('dashboard/user');   
 	}
 
 }
