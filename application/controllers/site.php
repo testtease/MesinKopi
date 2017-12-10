@@ -52,6 +52,14 @@ class Site extends CI_Controller {
     $this->load->view('site/v_foot');
   }
 
+    public function services()
+  {
+  	$data['judul']='Menikmati kopi | Services';
+    $this->load->view('site/v_head',$data);
+    $this->load->view('site/v_services');
+    $this->load->view('site/v_foot');
+  }
+
 }
 
 /* End of file site.php */
